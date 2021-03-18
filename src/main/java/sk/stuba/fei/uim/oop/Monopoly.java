@@ -13,6 +13,7 @@ public class Monopoly {
         //Creating scanners for inputs
         Scanner num_of_players = new Scanner(System.in);
         Scanner nick = new Scanner(System.in);
+        Scanner playerOption = new Scanner(System.in);
 
         //Creating players
         System.out.println("Enter the number of players (2-4): ");
@@ -29,7 +30,7 @@ public class Monopoly {
 
         }
 
-        printPlayerInfo(players);
+        printPlayersInfo(players);
 
         //Creating game-board
 
@@ -67,10 +68,41 @@ public class Monopoly {
             }
         }
 
+        //Game-cycle
+        System.out.println();
+        int i = 1;
+        while(players.size() > 1){
+            System.out.println("-------Round " + i + "-------\n");
+            for(Player s:players){
+                System.out.println(s.getPlayerName() + "'s turn: R -> skip buy and roll dice\t B -> buy property and roll after");
+                char playerChose = playerOption.next().charAt(0);
 
+                switch (playerChose){
+                    case 'B':
+                        System.out.println();
+                        printPlayersInfo(players);
+                        s.rollDice();
+                        printPlayerInfo(s);
+                        break;
+
+                    case 'R':
+                        s.rollDice();
+                        printPlayerInfo(s);
+                        System.out.println();
+                        break;
+
+                    default:
+                        System.out.println("Seems like you mispelled! Sorry, try again next turn!");
+                        System.out.println();
+
+
+                }
+            }
+            i++;
+        }
     }
 
-    public void printPlayerInfo(List<Player> players){
+    private void printPlayersInfo(List<Player> players){
         System.out.println("\nPlayers actual info:");
         int i = 1;
         for(Player s:players){
@@ -78,4 +110,10 @@ public class Monopoly {
             i++;
         }
     }
+
+    private void printPlayerInfo(Player s){
+        System.out.println("[" + s.getPlayerID() + "]" + s.getPlayerName() + "\t\tMoney:\t" + s.getPlayerMoney() + "\t\tPosition:\t" + s.getPlayerPos());
+    }
+
+
 }

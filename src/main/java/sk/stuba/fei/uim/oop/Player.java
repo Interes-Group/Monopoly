@@ -1,5 +1,7 @@
 package sk.stuba.fei.uim.oop;
 
+import java.util.Random;
+
 public class Player {
     private static int counter = 0;
     private String name;
@@ -9,7 +11,7 @@ public class Player {
 
 
     public Player(String name) {
-        this(name, 1000000, 0);
+        this(name, 1000000, 1);
     }
 
     public Player(String name, int money, int position){
@@ -18,6 +20,19 @@ public class Player {
         this.position = position;
         counter++;
         this.id = counter;
+    }
+
+    public void rollDice(){
+        //random number int range 1 - 6
+        Random r = new Random();
+        int num = r.nextInt((6-1)+1) + 1;
+        System.out.println("You rolled number [" + num + "]!");
+        this.position = this.position + num;
+
+        if(this.position>24){
+            this.position = this.position - 24;
+        }
+
     }
 
     public String getPlayerName() {
