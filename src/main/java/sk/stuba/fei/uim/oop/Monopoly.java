@@ -8,12 +8,13 @@ public class Monopoly {
 
     private static final int NUMBER_OF_FIELDS = 24;
 
-    public void startGame(){
+    public void playGame(){
 
         //Creating scanners for inputs
         Scanner num_of_players = new Scanner(System.in);
         Scanner nick = new Scanner(System.in);
         Scanner playerOption = new Scanner(System.in);
+        Scanner playerYesNo = new Scanner(System.in);
 
         //Creating players
         System.out.println("Enter the number of players (2-4): ");
@@ -33,38 +34,27 @@ public class Monopoly {
         printPlayersInfo(players);
 
         //Creating game-board
+        Field[] gameboard = new Field[NUMBER_OF_FIELDS];
 
-        List<Field> fields = new ArrayList<>();
-
-        for(int i=1; i<NUMBER_OF_FIELDS; i++){
-            if(i==1){
-                StartField localField = new StartField();
-                fields.add(localField);
-            }
-
-            else if(i==4 || i==10 || i== 16 || i==22){
-                ChanceField localField = new ChanceField();
-                fields.add(localField);
-            }
-
-            else if(i==7){
-                PrisonField localField = new PrisonField();
-                fields.add(localField);
-            }
-
-            else if(i==13){
-                PoliceField localField = new PoliceField();
-                fields.add(localField);
-            }
-
-            else if(i==19){
-                TaxField localField = new TaxField();
-                fields.add(localField);
-            }
-
-            else{
-                RealEstateField localField = new RealEstateField();
-                fields.add(localField);
+        for(int i=0; i<NUMBER_OF_FIELDS; i++) {
+            if (i == 0) {
+                gameboard[i] = new StartField();
+            } else if (i == 3 || i == 9 || i == 15 || i == 21) {
+                gameboard[i] = new ChanceField();
+            } else if (i == 6) {
+                gameboard[i] = new PrisonField();
+            } else if (i == 12) {
+                gameboard[i] = new PoliceField();
+            } else if (i == 18) {
+                gameboard[i] = new TaxField();
+            } else if (i == 1 || i == 2 || i == 4 || i == 5) {
+                gameboard[i] = new HouseRealEstate();
+            } else if (i == 7 || i == 8 || i == 10 || i == 11) {
+                gameboard[i] = new ApartmentRealEstate();
+            } else if (i == 13 || i == 14 || i == 16 || i == 17) {
+                gameboard[i] = new VillaRealEstate();
+            } else {
+                gameboard[i] = new HotelRealEstate();
             }
         }
 
@@ -72,29 +62,36 @@ public class Monopoly {
         System.out.println();
         int i = 1;
         while(players.size() > 1){
-            System.out.println("-------Round " + i + "-------\n");
-            for(Player s:players){
-                System.out.println(s.getPlayerName() + "'s turn: R -> skip buy and roll dice\t B -> buy property and roll after");
+            System.out.println("--------------ROUND " + i + "--------------\n");
+            for(Player s:players) {
+                System.out.println("__________" + s.getPlayerName() + "'s turn__________");
+                System.out.println("Press R to roll dice! Dont mispell or you will skip this round!");
                 char playerChose = playerOption.next().charAt(0);
 
-                switch (playerChose){
-                    case 'B':
-                        System.out.println();
-                        printPlayersInfo(players);
-                        s.rollDice();
-                        printPlayerInfo(s);
-                        break;
+                if(playerChose == 'R'){
+                    s.rollDice();
+                    s.printPlayerInfo();
+                    System.out.println();
 
-                    case 'R':
-                        s.rollDice();
-                        printPlayerInfo(s);
-                        System.out.println();
-                        break;
+                    if(gameboard[s.getPlayerPos()] instanceof RealEstateField){
+                        gameboard[s.getPlayerPos()].printBuilding();
 
-                    default:
-                        System.out.println("Seems like you mispelled! Sorry, try again next turn!");
-                        System.out.println();
+                        System.out.println("Do you want to buy this property?\t [y/n]");
+                        String choice = playerYesNo.nextLine();
+                        if (choice.equals("y")) {
+                            System.out.println("Buying property!\n");
+                            //buy property
+                        }
+                    }
 
+                    if(gameboard[s.getPlayerPos()] instanceof StartField){
+                        gameboard[s.getPlayerPos()].makeAction();
+                    }
+
+                    if(gameboard[s.getPlayerPos()] instanceof TaxField){
+                        gameboard[s.getPlayerPos()].makeAction();
+                        s.takeMoney(500000);
+                    }
 
                 }
             }
@@ -110,10 +107,5 @@ public class Monopoly {
             i++;
         }
     }
-
-    private void printPlayerInfo(Player s){
-        System.out.println("[" + s.getPlayerID() + "]" + s.getPlayerName() + "\t\tMoney:\t" + s.getPlayerMoney() + "\t\tPosition:\t" + s.getPlayerPos());
-    }
-
 
 }

@@ -4,14 +4,14 @@ import java.util.Random;
 
 public class Player {
     private static int counter = 0;
-    private String name;
-    private int id;
-    private int money;
+    private final String name;
+    private final int id;
+    private double money;
     private int position;
 
 
     public Player(String name) {
-        this(name, 1000000, 1);
+        this(name, 1000000, 0);
     }
 
     public Player(String name, int money, int position){
@@ -29,17 +29,23 @@ public class Player {
         System.out.println("You rolled number [" + num + "]!");
         this.position = this.position + num;
 
-        if(this.position>24){
+        if(this.position>23){
             this.position = this.position - 24;
+            this.addMoney(200000);
+            System.out.println("You get 200000 dollars for passing the start line!");
         }
 
+    }
+
+    public void printPlayerInfo(){
+        System.out.println("[" + this.getPlayerID() + "]" + this.getPlayerName() + "\t\tMoney:\t" + this.getPlayerMoney() + "\t\tPosition:\t" + this.getPlayerPos());
     }
 
     public String getPlayerName() {
         return this.name;
     }
 
-    public int getPlayerMoney() {
+    public double getPlayerMoney() {
         return this.money;
     }
 
@@ -49,6 +55,14 @@ public class Player {
 
     public int getPlayerID() {
         return this.id;
+    }
+
+    public void addMoney(double money){
+        this.money = this.money + money;
+    }
+
+    public void takeMoney(double money){
+        this.money = this.money - money;
     }
 
 }
