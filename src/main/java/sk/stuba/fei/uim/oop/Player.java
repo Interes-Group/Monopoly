@@ -4,10 +4,12 @@ import java.util.Random;
 
 public class Player {
     private static int counter = 0;
+
     private final String name;
     private final int id;
     private double money;
     private int position;
+    private int prisonLaps;
 
 
     public Player(String name) {
@@ -18,6 +20,7 @@ public class Player {
         this.name = name;
         this.money = money;
         this.position = position;
+        this.prisonLaps = 0;
         counter++;
         this.id = counter;
     }
@@ -29,7 +32,7 @@ public class Player {
         System.out.println("You rolled number [" + num + "]!");
         this.position = this.position + num;
 
-        if(this.position>23){
+        if(this.position>=23){
             this.position = this.position - 24;
             this.addMoney(200000);
             System.out.println("You get 200000 dollars for passing the start line!");
@@ -93,6 +96,18 @@ public class Player {
     public void payMoney(double money, Player player){
         player.addMoney(money);
         this.takeMoney(money);
+    }
+
+    public int getPrisonLaps(){
+        return this.prisonLaps;
+    }
+
+    public void setPrisonLaps(int laps){
+        this.prisonLaps = laps;
+    }
+
+    public void setPlayerPos(int pos){
+        this.position = pos;
     }
 
 }

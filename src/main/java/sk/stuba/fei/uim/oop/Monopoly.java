@@ -16,7 +16,7 @@ public class Monopoly {
         Scanner playerOption = new Scanner(System.in);
         Scanner playerYesNo = new Scanner(System.in);
 
-        //default player -> meaning he owns every property from the start (banker)
+        //default player -> meaning he owns every property from the start (banker) and sells them to players
         Player bank = new Player("bank", 999999999,0);
 
         //Creating players
@@ -67,41 +67,59 @@ public class Monopoly {
         while(players.size() > 1){
             System.out.println("--------------ROUND " + i + "--------------\n");
             for(Player s:players) {
-                System.out.println("__________" + s.getPlayerName() + "'s turn__________");
-                System.out.println("Press R to roll dice! Dont mispell or you will skip this round!");
-                char playerChose = playerOption.next().charAt(0);
+                if (s.getPrisonLaps()==0){
+                    System.out.println("__________" + s.getPlayerName() + "'s turn__________");
+                    System.out.println("Press R to roll dice! Dont mispell or you will skip this round!");
+                    char playerChose = playerOption.next().charAt(0);
 
-                if(playerChose == 'R'){
-                    s.rollDice();
+                    if(playerChose == 'R'){
+                        s.rollDice();
+                        s.printPlayerInfo();
+                        System.out.println();
+
+                        if(gameboard[s.getPlayerPos()] instanceof RealEstateField){
+                            gameboard[s.getPlayerPos()].printBuilding();
+                            s.payRent((RealEstateField)gameboard[s.getPlayerPos()]);
+
+                            System.out.println("Do you want to buy this property?\t [y/n]");
+                            String choice = playerYesNo.nextLine();
+                            if (choice.equals("y")) {
+                                s.buyProperty((RealEstateField)gameboard[s.getPlayerPos()]);
+                                s.printPlayerInfo();
+                                System.out.println();
+                            }
+                        }
+
+                        if(gameboard[s.getPlayerPos()] instanceof StartField){
+                            gameboard[s.getPlayerPos()].makeAction();
+                        }
+
+                        if(gameboard[s.getPlayerPos()] instanceof TaxField){
+                            gameboard[s.getPlayerPos()].makeAction();
+                            s.takeMoney(500000);
+                        }
+
+                        if(gameboard[s.getPlayerPos()] instanceof ChanceField){
+                            gameboard[s.getPlayerPos()].makeAction();
+                        }
+
+                        if(gameboard[s.getPlayerPos()] instanceof PrisonField){
+                            gameboard[s.getPlayerPos()].lockPlayer(s);
+                        }
+
+                        if(gameboard[s.getPlayerPos()] instanceof PoliceField){
+                            s.setPlayerPos(6);
+                            gameboard[s.getPlayerPos()].lockPlayer(s);
+                        }
+
+                    }
+                }
+                else{
+                    System.out.println("__________" + s.getPlayerName() + "'s turn__________");
                     s.printPlayerInfo();
                     System.out.println();
-
-                    if(gameboard[s.getPlayerPos()] instanceof RealEstateField){
-                        gameboard[s.getPlayerPos()].printBuilding();
-                        s.payRent((RealEstateField)gameboard[s.getPlayerPos()]);
-
-                        System.out.println("Do you want to buy this property?\t [y/n]");
-                        String choice = playerYesNo.nextLine();
-                        if (choice.equals("y")) {
-                            s.buyProperty((RealEstateField)gameboard[s.getPlayerPos()]);
-                            s.printPlayerInfo();
-                            System.out.println();
-                        }
-                    }
-
-                    if(gameboard[s.getPlayerPos()] instanceof StartField){
-                        gameboard[s.getPlayerPos()].makeAction();
-                    }
-
-                    if(gameboard[s.getPlayerPos()] instanceof TaxField){
-                        gameboard[s.getPlayerPos()].makeAction();
-                        s.takeMoney(500000);
-                    }
-
-                    if(gameboard[s.getPlayerPos()] instanceof ChanceField){
-                        gameboard[s.getPlayerPos()].makeAction();
-                    }
-
+                    System.out.println("You are in prison for " + s.getPrisonLaps() + " more rounds, skipping this turn!");
+                    s.setPrisonLaps(s.getPrisonLaps()-1);
                 }
             }
             i++;
