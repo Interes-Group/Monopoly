@@ -4,8 +4,7 @@ public class RealEstateField extends Field{
 
     protected double price;
     protected double rent;
-    protected String owner;
-
+    protected Player owner;
 
     public double getPrice() {
         return this.price;
@@ -15,8 +14,12 @@ public class RealEstateField extends Field{
         return this.rent;
     }
 
-    public String getOwner() {
+    public Player getOwner() {
         return this.owner;
+    }
+
+    public void setOwner(Player player){
+        this.owner = player;
     }
 
     public void printBuilding(){}

@@ -37,6 +37,31 @@ public class Player {
 
     }
 
+    public void buyProperty(RealEstateField realestate){
+        if(this.money>=realestate.getPrice()){
+            if(realestate.getOwner().getPlayerName().equals("bank")){
+                this.takeMoney(realestate.getPrice());
+                System.out.println("You bought this property for " + realestate.getPrice() + "!");
+                realestate.setOwner(this);
+            }
+            else{
+                this.payMoney(realestate.getPrice(), realestate.getOwner());
+                System.out.println("You bought this property for " + realestate.getPrice() + " from " + realestate.getOwner().getPlayerName());
+                realestate.setOwner(this);
+            }
+        }
+        else{
+            System.out.println("You don't have enough money to buy this property!");
+        }
+    }
+
+    public void payRent(RealEstateField realestate){
+        if(!(realestate.getOwner().getPlayerName()).equals("bank")){
+            this.payMoney(realestate.getRent(), realestate.getOwner());
+            System.out.println("You paid rent " + realestate.getRent() + " to " + realestate.getOwner().getPlayerName() + " for this property!");
+        }
+    }
+
     public void printPlayerInfo(){
         System.out.println("[" + this.getPlayerID() + "]" + this.getPlayerName() + "\t\tMoney:\t" + this.getPlayerMoney() + "\t\tPosition:\t" + this.getPlayerPos());
     }
@@ -63,6 +88,11 @@ public class Player {
 
     public void takeMoney(double money){
         this.money = this.money - money;
+    }
+
+    public void payMoney(double money, Player player){
+        player.addMoney(money);
+        this.takeMoney(money);
     }
 
 }

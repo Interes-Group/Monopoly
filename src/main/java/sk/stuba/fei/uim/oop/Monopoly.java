@@ -16,6 +16,9 @@ public class Monopoly {
         Scanner playerOption = new Scanner(System.in);
         Scanner playerYesNo = new Scanner(System.in);
 
+        //default player -> meaning he owns every property from the start (banker)
+        Player bank = new Player("bank", 999999999,0);
+
         //Creating players
         System.out.println("Enter the number of players (2-4): ");
         int numPlayers = num_of_players.nextInt(); //reads int from user
@@ -48,13 +51,13 @@ public class Monopoly {
             } else if (i == 18) {
                 gameboard[i] = new TaxField();
             } else if (i == 1 || i == 2 || i == 4 || i == 5) {
-                gameboard[i] = new HouseRealEstate();
+                gameboard[i] = new HouseRealEstate(bank);
             } else if (i == 7 || i == 8 || i == 10 || i == 11) {
-                gameboard[i] = new ApartmentRealEstate();
+                gameboard[i] = new ApartmentRealEstate(bank);
             } else if (i == 13 || i == 14 || i == 16 || i == 17) {
-                gameboard[i] = new VillaRealEstate();
+                gameboard[i] = new VillaRealEstate(bank);
             } else {
-                gameboard[i] = new HotelRealEstate();
+                gameboard[i] = new HotelRealEstate(bank);
             }
         }
 
@@ -75,12 +78,14 @@ public class Monopoly {
 
                     if(gameboard[s.getPlayerPos()] instanceof RealEstateField){
                         gameboard[s.getPlayerPos()].printBuilding();
+                        s.payRent((RealEstateField)gameboard[s.getPlayerPos()]);
 
                         System.out.println("Do you want to buy this property?\t [y/n]");
                         String choice = playerYesNo.nextLine();
                         if (choice.equals("y")) {
-                            System.out.println("Buying property!\n");
-                            //buy property
+                            s.buyProperty((RealEstateField)gameboard[s.getPlayerPos()]);
+                            s.printPlayerInfo();
+                            System.out.println();
                         }
                     }
 
@@ -91,6 +96,10 @@ public class Monopoly {
                     if(gameboard[s.getPlayerPos()] instanceof TaxField){
                         gameboard[s.getPlayerPos()].makeAction();
                         s.takeMoney(500000);
+                    }
+
+                    if(gameboard[s.getPlayerPos()] instanceof ChanceField){
+                        gameboard[s.getPlayerPos()].makeAction();
                     }
 
                 }
