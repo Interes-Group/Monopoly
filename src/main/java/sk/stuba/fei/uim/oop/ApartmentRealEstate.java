@@ -2,7 +2,7 @@ package sk.stuba.fei.uim.oop;
 
 public class ApartmentRealEstate extends RealEstateField{
 
-    private static final double RENT_RATE = 0.3;
+    private static final double RENT_RATE = 0.9;
     private static final double PRICE = 400000;
 
     public ApartmentRealEstate(Player bank){

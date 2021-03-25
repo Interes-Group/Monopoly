@@ -15,14 +15,14 @@ public class ChanceField extends Field{
             randCard = cards1.get(rand.nextInt(cards1.size()));
             cards1.remove(randCard);
             cards2.add(randCard);
-            System.out.println("You get " + randCard + " dollars!");
+            System.out.println("Your card: " + randCard + " dollars!");
         }
         else{
             Random rand2 = new Random();
             randCard = cards2.get(rand2.nextInt(cards2.size()));
             cards2.remove(randCard);
             cards1.add(randCard);
-            System.out.println("You get " + randCard + " dollars!");
+            System.out.println("Your card: " + randCard + " dollars!");
         }
 
         return randCard;
