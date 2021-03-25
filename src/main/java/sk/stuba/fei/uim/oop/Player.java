@@ -1,15 +1,11 @@
 package sk.stuba.fei.uim.oop;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
 
 public class Player {
-    private static int counter = 0;
-
     private final String name;
-    private final int id;
     private double money;
     private int position;
     private int prisonLaps;
@@ -24,8 +20,6 @@ public class Player {
         this.money = money;
         this.position = position;
         this.prisonLaps = 0;
-        counter++;
-        this.id = counter;
     }
 
     public void rollDice(){
@@ -95,7 +89,7 @@ public class Player {
     }
 
     public void printPlayerInfo(){
-        System.out.println("[" + this.getPlayerID() + "]" + this.getPlayerName() + "\t\tMoney:\t" + this.getPlayerMoney() + "\t\tPosition:\t" + this.getPlayerPos());
+        System.out.println(this.getPlayerName() + "\t\tMoney:\t" + this.getPlayerMoney() + "\t\tPosition:\t" + this.getPlayerPos());
     }
 
     public String getPlayerName() {
@@ -108,10 +102,6 @@ public class Player {
 
     public int getPlayerPos() {
         return this.position;
-    }
-
-    public int getPlayerID() {
-        return this.id;
     }
 
     public void addMoney(double money){

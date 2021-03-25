@@ -172,7 +172,7 @@ public class Monopoly {
         System.out.println("\nPlayers actual info:");
         int i = 1;
         for(Player s:players){
-            System.out.println("Player " + i + ":\t[" + s.getPlayerID() + "]" + s.getPlayerName() + "\t\tMoney:\t" + s.getPlayerMoney() + "\t\tPosition:\t" + s.getPlayerPos());
+            System.out.println("Player " + i + ":\t" + s.getPlayerName() + "\t\tMoney:\t" + s.getPlayerMoney() + "\t\tPosition:\t" + s.getPlayerPos());
             i++;
         }
     }
