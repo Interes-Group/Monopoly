@@ -1,6 +1,9 @@
 package sk.stuba.fei.uim.oop;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
+
 
 public class Player {
     private static int counter = 0;
@@ -32,7 +35,7 @@ public class Player {
         System.out.println("You rolled number [" + num + "]!");
         this.position = this.position + num;
 
-        if(this.position>=23){
+        if(this.position>23){
             this.position = this.position - 24;
             this.addMoney(200000);
             System.out.println("You get 200000 dollars for passing the start line!");
@@ -41,27 +44,53 @@ public class Player {
     }
 
     public void buyProperty(RealEstateField realestate){
-        if(this.money>=realestate.getPrice()){
-            if(realestate.getOwner().getPlayerName().equals("bank")){
-                this.takeMoney(realestate.getPrice());
-                System.out.println("You bought this property for " + realestate.getPrice() + "!");
-                realestate.setOwner(this);
-            }
-            else{
-                this.payMoney(realestate.getPrice(), realestate.getOwner());
-                System.out.println("You bought this property for " + realestate.getPrice() + " from " + realestate.getOwner().getPlayerName());
-                realestate.setOwner(this);
-            }
+        if(realestate.getOwner().equals(this)){
+            System.out.println("You already own this property!\n");
         }
         else{
-            System.out.println("You don't have enough money to buy this property!");
+            if(this.money>=realestate.getPrice()){
+                if(realestate.getOwner().getPlayerName().equals("bank")){
+                    this.takeMoney(realestate.getPrice());
+                    System.out.println("You bought this property for " + realestate.getPrice() + "!");
+                    realestate.setOwner(this);
+                }
+                else{
+                    this.payMoney(realestate.getPrice(), realestate.getOwner());
+                    System.out.println("You bought this property for " + realestate.getPrice() + " from " + realestate.getOwner().getPlayerName());
+                    realestate.setOwner(this);
+                }
+            }
+            else{
+                System.out.println("You don't have enough money to buy this property!");
+            }
         }
     }
 
     public void payRent(RealEstateField realestate){
         if(!(realestate.getOwner().getPlayerName()).equals("bank")){
             this.payMoney(realestate.getRent(), realestate.getOwner());
+            System.out.println();
             System.out.println("You paid rent " + realestate.getRent() + " to " + realestate.getOwner().getPlayerName() + " for this property!");
+            this.printPlayerInfo();
+        }
+    }
+
+    public void killPlayer(List<Player> players, Field[] gameboard, Player bank){
+        if(this.getPlayerMoney()<0){
+            for(int i=0;i<24;i++){
+                if(gameboard[i] instanceof RealEstateField){
+                    ((RealEstateField) gameboard[i]).setOwner(bank);
+                }
+            }
+            /*
+            for(Player player: new ArrayList<>(players)){
+                if(player.equals(this)){
+                    players.remove(player);
+                }
+            }*/
+
+            players.removeIf(n -> (n.equals(this)));
+            System.out.println("You lost the game becuase you dont have enough money!");
         }
     }
 
